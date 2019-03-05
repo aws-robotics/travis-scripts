@@ -24,4 +24,7 @@ docker cp $TRAVIS_BUILD_DIR "$ROS_DISTRO"-container:/"$ROS_DISTRO"_ws/src/
 docker exec "$ROS_DISTRO"-container /bin/bash \
   -c "sh /shared/$(basename ${SCRIPT_DIR})/"'ros"$ROS_VERSION"_build.sh' || travis_terminate 1;
 # upload coverage report to codecov
-bash <(curl -s https://codecov.io/bash) -Z -F "${ROS_DISTRO},ROS_${ROS_VERSION}"
+if [ -z "${NO_TEST}" ];
+then
+  bash <(curl -s https://codecov.io/bash) -Z -F "${ROS_DISTRO},ROS_${ROS_VERSION}"
+fi
