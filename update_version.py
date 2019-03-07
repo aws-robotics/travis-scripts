@@ -20,7 +20,7 @@ def version_increment(version, increment_type='patch'):
         components[VERSION_COMPONENTS_TO_IDX[increment_type]] = str(int(components[VERSION_COMPONENTS_TO_IDX[increment_type]]) + 1)
         return '.'.join(components)
 
-def update_version(file_path, current_version, package_name):
+def update_version(file_path, current_version):
     new_version = version_increment(current_version)
     # Create ephemeral version.json in order to tell the internal build system which version should be built.
     with open(file_path, 'wb') as f:
