@@ -1,3 +1,15 @@
+"""Version updater for Sample Applications
+
+This script helps cut a new release for ROS applications which are not intended to be released via bloom, and is meant to be invoked automatically as part of a Travis CI job.
+It takes in a path indicating where the version.json file should be created, and the current version of the application (typically provided by `git describe`).
+It also relies on the environment variables TRAVIS_BUILD_DIR and SA_PACKAGE_NAME being preset (the latter implies which package manifest should be updated).
+
+The tool performs the following actions:
+1. Determines what is the new version (bumps the patch component by default).
+2. Creates a version.json file with the new version string.
+3. Updates package.xml if necessary. 
+"""
+
 import os
 import sys
 import subprocess
