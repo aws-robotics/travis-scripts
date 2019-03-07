@@ -32,7 +32,7 @@ else
   BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
 fi
 docker exec "$ROS_DISTRO"-container /bin/bash \
-    -c "sh /shared/$(basename ${SCRIPT_DIR})/"${BUILD_SCRIPT_NAME}
+  -c "sh /shared/$(basename ${SCRIPT_DIR})/"${BUILD_SCRIPT_NAME}
 # upload coverage report to codecov
 if [ -z "${NO_TEST}" ];
 then
