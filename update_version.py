@@ -32,14 +32,14 @@ def update_version(file_path, current_version):
         return
     xml_tree = ET.parse(package_xml_path)
     xml_root = xml_tree.getroot()
-    version_element = root.findall('version')[0]
+    version_element = xml_root.findall('version')[0]
     if StrictVersion(version_element.text) == StrictVersion(new_version):
         print 'package.xml already up to date with version %s, not updating.' % (new_version, )
     elif StrictVersion(version_element.text) > StrictVersion(new_version):
         raise ValueError('The version in package.xml (%s) is newer than the version intended to be released (%s)' % (version_element.text, new_version, ))
     else:
         version_element.text = new_version
-        tree.write(package_xml_path)
+        xml_tree.write(package_xml_path)
     # TODO: git commit, push / open PR.
         
 def get_path_to_package_xml():
