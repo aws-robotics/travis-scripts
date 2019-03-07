@@ -7,8 +7,6 @@ apt update && apt install -y python3-colcon-common-extensions && pip3 install -U
 pip3 install colcon-bundle colcon-ros-bundle
 . /opt/ros/$ROS_DISTRO/setup.sh
 
-ls /"$ROS_DISTRO"_ws/src
-bash -c "echo '`ls /"$ROS_DISTRO"_ws/src 2>&1`'"
 BUILD_DIR_NAME=`basename $TRAVIS_BUILD_DIR`
 # use colcon as build tool to build the robot workspace
 cd /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/robot_ws/
