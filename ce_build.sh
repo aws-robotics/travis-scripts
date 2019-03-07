@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-env
-bash -c "echo '`env | grep TRAVIS`'"
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # create a shared mount point to put coverage report
