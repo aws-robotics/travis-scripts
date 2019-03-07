@@ -6,29 +6,32 @@ from distutils.version import StrictVersion
 
 VERSION_COMPONENTS_TO_IDX = {'major': 0, 'minor': 1, 'patch': 2}
 FIRST_VERSION = '1.0.0'
+# If the repository already contains tags in an unsupported format (e.g. b1.0.58.0.1.0.51.0), bump to the following version.
 FIRST_VERSION_WITH_EXISTING_OBSOLETE_TAGS = '1.1.0'
 
-def version_increment(version, increment_type='patch'):
+def get_incremented_version(version, increment_type='patch'):
     components = version.split('.')
     if len(components) != 3:
-        # Version is not bootstrapped properly. Either there was no release yet (no tags) or the format is obsolete.
+        # Either there was no release yet (no tags) or the tag format is invalid.
         if 'No names found' in version:
             return FIRST_VERSION
         else:
             return FIRST_VERSION_WITH_EXISTING_OBSOLETE_TAGS
     else:
+        # Bump version according to increment_type
         components[VERSION_COMPONENTS_TO_IDX[increment_type]] = str(int(components[VERSION_COMPONENTS_TO_IDX[increment_type]]) + 1)
         return '.'.join(components)
 
 def update_version(file_path, current_version):
-    new_version = version_increment(current_version)
+    new_version = get_incremented_version(current_version)
     # Create ephemeral version.json in order to tell the internal build system which version should be built.
     with open(file_path, 'wb') as f:
         f.write('{"application_version": "%s"}\n' % (new_version, ))
-    # Update the version in package.xml if not up to date & commit
+        
+    # Update version in package.xml if needed.
     package_xml_path = get_path_to_package_xml()
     if not package_xml_path:
-        # Skip updating package.xml
+        print 'Skipping package.xml update as it could not be located (Does the environment contain TRAVIS_BUILD_DIR and SA_PACKAGE_NAME?)'
         return
     xml_tree = ET.parse(package_xml_path)
     xml_root = xml_tree.getroot()
