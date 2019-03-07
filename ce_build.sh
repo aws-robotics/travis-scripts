@@ -13,10 +13,12 @@ cp -r ${SCRIPT_DIR} shared/
 # get a docker container from OSRF's docker hub
 docker pull ros:"$ROS_DISTRO"-ros-core
 # run docker container
-docker run -v "$PWD/shared:/shared" -e ROS_DISTRO="$ROS_DISTRO" \
+docker run -v "$PWD/shared:/shared" \
+  -e ROS_DISTRO="$ROS_DISTRO" \
   -e PACKAGE_NAME="$PACKAGE_NAME" \
   -e ROS_VERSION="$ROS_VERSION" \
   -e NO_TEST="$NO_TEST" \
+  -e TRAVIS_BUILD_DIR="$TRAVIS_BUILD_DIR" \
   --name "$ROS_DISTRO"-container \
   -dit ros:"$ROS_DISTRO"-ros-core /bin/bash
 # make a workspace in the docker container
