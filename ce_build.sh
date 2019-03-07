@@ -21,8 +21,16 @@ docker exec "$ROS_DISTRO"-container /bin/bash -c 'mkdir -p /"$ROS_DISTRO"_ws/src
 # copy the code over to the docker container
 docker cp $TRAVIS_BUILD_DIR "$ROS_DISTRO"-container:/"$ROS_DISTRO"_ws/src/
 # execute build scripts and run test
+if [ -z "${SA_NAME}" ];
+then
+  # SA_NAME not set - assume a Cloud Extension build
+  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_build.sh
+else
+  # SA_NAME is set - assume a Sample Application build
+  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
+fi
 docker exec "$ROS_DISTRO"-container /bin/bash \
-  -c "sh /shared/$(basename ${SCRIPT_DIR})/"'ros"$ROS_VERSION"_build.sh' || travis_terminate 1;
+    -c "sh /shared/$(basename ${SCRIPT_DIR})/"${BUILD_SCRIPT_NAME} || travis_terminate 1;
 # upload coverage report to codecov
 if [ -z "${NO_TEST}" ];
 then
