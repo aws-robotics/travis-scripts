@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+if [ ! -z "${TRAVIS_TAG}" ]; then
+    # Do not run for builds triggered by tagging.
+    echo "Skipping $0 $@"
+    exit 0
+fi
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # create a shared mount point to put coverage report
