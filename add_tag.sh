@@ -18,8 +18,9 @@ git config --global user.name "${GH_USER_NAME}"
 # Switch to SSH url
 git remote set-url origin git@github.com:${TRAVIS_REPO_SLUG}.git
 # Commit changes to package.xml files.
+git status
 git commit *package.xml* -m "Updating package manifests for release $SA_VERSION"
-git push
+git push origin master
 # Add and push tag
 git tag -a $SA_VERSION -m "Release $SA_VERSION"
 git push origin $SA_VERSION
