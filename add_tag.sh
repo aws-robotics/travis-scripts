@@ -15,7 +15,7 @@ if [ ! -f ~/.ssh/github_deploy.pem ]; then
     chmod 400 $TRAVIS_BUILD_DIR/github_deploy.pem && mv $TRAVIS_BUILD_DIR/github_deploy.pem ~/.ssh/ && ssh-add ~/.ssh/github_deploy.pem
 fi
 
-if [ -z "${SHOULD_UPDATE_VERSION}" ]; then
+if [ ! -z "${SHOULD_UPDATE_VERSION}" ]; then
     # Use git tag for versioning, updating package.xml in the process
     # Figure out what's the new version
     python $SCRIPT_DIR/update_version.py "$TRAVIS_BUILD_DIR/version.json" "`git describe --abbrev=0 --tags 2>&1`"
