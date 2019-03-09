@@ -56,6 +56,15 @@ def update_version(file_path, current_version):
         version_element.text = new_version
         xml_tree.write(package_xml_path)
     # TODO: git commit, push / open PR.
+    
+def get_current_package_xml_version():
+    package_xml_path = get_path_to_package_xml()
+    if not package_xml_path:
+        return None
+    xml_tree = ET.parse(package_xml_path)
+    xml_root = xml_tree.getroot()
+    version_element = xml_root.findall('version')[0]
+    return version_element.text
         
 def get_path_to_package_xml():
     """
