@@ -31,7 +31,7 @@ if [ ! -z "${SHOULD_UPDATE_VERSION}" ]; then
 else 
     # Use Travis build number for versioning; Git tags & package manifest will not be updated.
     stored_pwd=`pwd`
-    cd $TRAVIS_BUILD_DIR && CURRENT_SA_VERSION=`python -c "import update_version; print update_version.get_current_package_xml_version()"`
+    cd $SCRIPT_DIR && CURRENT_SA_VERSION=`python -c "import update_version; print update_version.get_current_package_xml_version()"`
     cd $stored_pwd
     export SA_VERSION=${CURRENT_SA_VERSION}.${TRAVIS_BUILD_NUMBER}
     echo '{"application_version": "$SA_VERSION"}' > "$TRAVIS_BUILD_DIR/version.json"
