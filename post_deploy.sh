@@ -6,6 +6,3 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
     echo "Skipping $0 $@"
     exit 0
 fi
-
-aws codepipeline start-pipeline-execution --name $CODE_PIPELINE_NAME
-# TODO: Potentially wait until the pipeline build completes and succeed the Travis build accordingly.
