@@ -8,8 +8,8 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
 fi
 
 if [ -z "${PIPELINE_TIMEOUT}" ]; then
-    # 15 minutes by default
-    PIPELINE_TIMEOUT=900
+    # 30 minutes by default
+    PIPELINE_TIMEOUT=1800
 fi
 
 # Start execution
@@ -22,6 +22,7 @@ elapsed_time=0
 while [ $elapsed_time -lt $PIPELINE_TIMEOUT ]; do 
   status=`aws codepipeline get-pipeline-execution --pipeline-name "$CODE_PIPELINE_NAME" --pipeline-execution-id "$PIPELINE_EXECUTION_ID" | jq -r .pipelineExecution.status`
   echo "Pipeline status: $status"
+  # status corresponds to https://docs.aws.amazon.com/codepipeline/latest/APIReference/API_PipelineExecution.html#CodePipeline-Type-PipelineExecution-status
   if [ "$status" = "Succeeded" ] || [ "$status" = "Superseded" ]; then
     echo "Pipeline execution finished."
     exit 0
