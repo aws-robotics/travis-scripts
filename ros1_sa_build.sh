@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
+
 # install dependencies
 apt update && apt install -y python3-pip python3-apt dpkg ros-$ROS_DISTRO-ros-base && rosdep update
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
@@ -20,6 +22,8 @@ mv ./bundle/output.tar.gz ./bundle/robot.tar.gz
 cd /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/simulation_ws/
 rosws update
 rosdep install --from-paths src --ignore-src -r -y
+GAZEBO_POST_ROSDEP_INSTALL_SCRIPT="${SCRIPT_DIR}/gazebo/${GAZEBO_VERSION}/post_rosdep_install.sh"
+if [ -f ${GAZEBO_POST_ROSDEP_INSTALL_SCRIPT} ]; then bash ${GAZEBO_POST_ROSDEP_INSTALL_SCRIPT}; fi
 colcon build --build-base build --install-base install
 colcon bundle --build-base build --install-base install --bundle-base bundle
 mv ./bundle/output.tar.gz ./bundle/simulation.tar.gz
