@@ -10,24 +10,22 @@ pip3 install colcon-bundle colcon-ros-bundle
 . /opt/ros/$ROS_DISTRO/setup.sh
 
 BUILD_DIR_NAME=`basename $TRAVIS_BUILD_DIR`
-# use colcon as build tool to build the robot workspace
-cd /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/robot_ws/
-rosws update
-rosdep install --from-paths src --ignore-src -r -y
-colcon build --build-base build --install-base install
-colcon bundle --build-base build --install-base install --bundle-base bundle
-mv ./bundle/output.tar.gz ./bundle/robot.tar.gz
 
-# use colcon as build tool to build the simulation workspace
-cd /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/simulation_ws/
-rosws update
-rosdep install --from-paths src --ignore-src -r -y
-GAZEBO_POST_ROSDEP_INSTALL_SCRIPT="${SCRIPT_DIR}/gazebo/${GAZEBO_VERSION}/post_rosdep_install.sh"
-if [ -f ${GAZEBO_POST_ROSDEP_INSTALL_SCRIPT} ]; then bash ${GAZEBO_POST_ROSDEP_INSTALL_SCRIPT}; fi
-colcon build --build-base build --install-base install
-colcon bundle --build-base build --install-base install --bundle-base bundle
-mv ./bundle/output.tar.gz ./bundle/simulation.tar.gz
-
-# move the artifacts to a shared mount point
-mv /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/robot_ws/bundle/robot.tar.gz /shared/robot_ws.tar.gz
-mv /"$ROS_DISTRO"_ws/src/$BUILD_DIR_NAME/simulation_ws/bundle/simulation.tar.gz /shared/simulation_ws.tar.gz
+IFS=','
+for WS in $WORKSPACES
+do
+  # use colcon as build tool to build the workspace if it exists
+  WS_DIR="/${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/${WS}"
+  echo "looking for ${WS}, $WS_DIR"
+  if [ -d "${WS_DIR}" ]; then
+    echo "WS ${WS_DIR} found, attempting to build"
+    WS_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/ws_builds/${WS}.sh"
+    if [ -f "${WS_BUILD_SCRIPT}" ]; then
+      cd "${WS_DIR}"
+      bash "${WS_BUILD_SCRIPT}"
+      mv ./bundle/output.tar.gz /shared/"${WS}".tar.gz
+    else
+      echo "Unable to find build script ${WS_BUILD_SCRIPT}, skipping build"
+    fi
+  fi
+done
