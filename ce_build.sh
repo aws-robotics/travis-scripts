@@ -21,6 +21,8 @@ else
   # SA_NAME is set - assume a Sample Application build
   BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
 fi
+
+echo "using Build script, ${BUILD_SCRIPT_NAME}"
 DOCKER_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/${BUILD_SCRIPT_NAME}"
 # get a docker container from OSRF's docker hub
 docker pull "ros:${ROS_DISTRO}-ros-core"
@@ -34,6 +36,7 @@ docker run -v "${PWD}/shared:/shared" \
   -e PACKAGE_LANG="${PACKAGE_LANG:-cpp}" \
   -e GAZEBO_VERSION="${GAZEBO_VERSION:-7}" \
   -e DOCKER_BUILD_SCRIPT="${DOCKER_BUILD_SCRIPT}" \
+  -e WORKSPACES="${WORKSPACES}" \
   --name "${ROS_DISTRO}-container" \
   -dit "ros:${ROS_DISTRO}-ros-core" /bin/bash
 # make a workspace in the docker container
