@@ -1,5 +1,9 @@
 #!/bin/bash
 export SA_VERSION=1
+touch version.json
+echo testtest1 >> version.json
+mv version.json "$TRAVIS_BUILD_DIR"
+
 # Move artifacts to shared/<version>/ and version.json to shared/
 mkdir "$SA_VERSION" && mv "$TRAVIS_BUILD_DIR"/shared/* "$SA_VERSION" && mv "$SA_VERSION" "$TRAVIS_BUILD_DIR"/shared/
 cp "$TRAVIS_BUILD_DIR/version.json" "$TRAVIS_BUILD_DIR/shared/version.json"
