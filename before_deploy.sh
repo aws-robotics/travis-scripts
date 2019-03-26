@@ -2,7 +2,6 @@
 export SA_VERSION=1
 touch version.json
 echo testtest1 >> version.json
-mv ./version.json "$TRAVIS_BUILD_DIR/version.json"
 
 # Move artifacts to shared/<version>/ and version.json to shared/
 
