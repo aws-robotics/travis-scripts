@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
+
 # install dependencies
 apt update && apt install -y python3-pip python3-apt zip dpkg ros-$ROS_DISTRO-ros-base && rosdep update
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
@@ -18,6 +20,7 @@ mv ./sources.zip /shared/sources.zip
 # use colcon as build tool to build the robot workspace
 echo "building robot ws"
 cd /"$ROS_DISTRO"_ws/"$SA_NAME"/robot_ws/
+
 rosws update
 rosdep install --from-paths src --ignore-src -r -y
 colcon build --base-paths . --build-base /build/private/"$SA_NAME"/build-output --install-base ./build/private/"$SA_NAME"/install-output
