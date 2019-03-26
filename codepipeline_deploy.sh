@@ -12,6 +12,14 @@ if [ -z "${PIPELINE_TIMEOUT}" ]; then
     PIPELINE_TIMEOUT=1800
 fi
 
+# Upload version.json to CodeCommit
+if [ -z "${MASTER_COMMIT_ID}" ]; then
+    # version.json file being uploaded the first time
+    aws codecommit put-file --repository-name "${CC_REPO_NAME}" --branch-name master --file-content file://"$TRAVIS_BUILD_DIR/shared/version.json" --file-path version.json --file-mode normal
+else
+    aws codecommit put-file --repository-name "${CC_REPO_NAME}" --branch-name master --file-content file://"$TRAVIS_BUILD_DIR/shared/version.json" --file-path version.json --file-mode normal --parent-commit-id "$MASTER_COMMIT_ID"
+fi
+
 # Start execution
 PIPELINE_EXECUTION_ID=`aws codepipeline start-pipeline-execution --name "$CODE_PIPELINE_NAME" | jq -r .pipelineExecutionId`
 

@@ -14,3 +14,4 @@ cp "$TRAVIS_BUILD_DIR/version.json" "$TRAVIS_BUILD_DIR/shared/version.json"
 export S3_BUCKET_NAME=`aws s3 ls | grep travissourcebucket | awk '{print $3}'`
 export SA_NAME_WITHOUT_DASHES=`echo $SA_NAME | sed -e 's/-//g'`
 export CODE_PIPELINE_NAME=`aws codepipeline list-pipelines | jq -r '.pipelines | .[] | .name' | grep "${SA_NAME_WITHOUT_DASHES}pipeline"`
+export MASTER_COMMIT_ID=`aws codecommit get-file --repository-name "${CC_REPO_NAME}" --file-path version.json | jq -r '.commitId'`
