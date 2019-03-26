@@ -7,33 +7,10 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
     exit 0
 fi
 
-if [ -z "${PIPELINE_TIMEOUT}" ]; then
-    # 30 minutes by default
-    PIPELINE_TIMEOUT=1800
-fi
-
-# Start execution
-PIPELINE_EXECUTION_ID=`aws codepipeline start-pipeline-execution --name "$CODE_PIPELINE_NAME" | jq -r .pipelineExecutionId`
-
-starting_time=`date +%s`
-retry_interval=5 # Poll every 5 seconds
-elapsed_time=0
-
-while [ $elapsed_time -lt $PIPELINE_TIMEOUT ]; do 
-  status=`aws codepipeline get-pipeline-execution --pipeline-name "$CODE_PIPELINE_NAME" --pipeline-execution-id "$PIPELINE_EXECUTION_ID" | jq -r .pipelineExecution.status`
-  echo "Pipeline status: $status"
-  # status corresponds to https://docs.aws.amazon.com/codepipeline/latest/APIReference/API_PipelineExecution.html#CodePipeline-Type-PipelineExecution-status
-  if [ "$status" = "Succeeded" ] || [ "$status" = "Superseded" ]; then
-    echo "Pipeline execution finished."
-    exit 0
-  elif [ "$status" = "Failed" ]; then
-    echo "Pipeline execution failed."
-    exit 1
-  else
-    sleep $retry_interval
-    let elapsed_time="`date +%s` - $starting_time"
-  fi
-done
-
-echo "Reached timeout waiting for pipeline to finish."
-exit 1
+# Clone the CC repository where version.json lives and commit the version.json file produced by current build
+git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
+cd cc-repo-for-version-file
+cp "$TRAVIS_BUILD_DIR/shared/version.json" version.json
+git add version.json
+git commit -m "updating version.json file by commitId: $TRAVIS_COMMIT_MESSAGE"
+git push
