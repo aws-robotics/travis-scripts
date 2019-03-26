@@ -9,7 +9,8 @@ MASTER_COMMIT_ID=`aws codecommit get-file --repository-name "${CC_REPO_NAME}" --
 echo $MASTER_COMMIT_ID
 if [ $? -ne 0 ]; then
     echo test
-else
-    export MASTER_COMMIT_ID=`echo $MASTER_COMMIT_ID | jq -r '.commitId'`
-    echo $MASTER_COMMIT_ID
+    exit 0
 fi
+export MASTER_COMMIT_ID=`echo $MASTER_COMMIT_ID | jq -r '.commitId'`
+echo $MASTER_COMMIT_ID
+

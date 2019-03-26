@@ -3,6 +3,7 @@ set -e
 touch version.json
 echo testtest1 >> version.json
 
+echo
 # Upload version.json to CodeCommit
 if [ -z "${MASTER_COMMIT_ID}" ]; then
     # version.json file being uploaded the first time
