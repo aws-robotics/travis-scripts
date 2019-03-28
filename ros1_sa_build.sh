@@ -11,7 +11,10 @@ pip3 install colcon-bundle colcon-ros-bundle
 
 BUILD_DIR_NAME=`basename $TRAVIS_BUILD_DIR`
 
-IFS=','
+if [ -z "$WORKSPACES" ]; then
+  WORKSPACES="robot_ws simulation_ws"
+fi
+
 for WS in $WORKSPACES
 do
   # use colcon as build tool to build the workspace if it exists
@@ -25,7 +28,11 @@ do
       bash "${WS_BUILD_SCRIPT}"
       mv ./bundle/output.tar.gz /shared/"${WS}".tar.gz
     else
-      echo "Unable to find build script ${WS_BUILD_SCRIPT}, skipping build"
+      echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
+      exit 1
     fi
+  else
+    echo "Unable to find workspace ${WS_DIR}, build failed"
+    exit 1
   fi
 done
