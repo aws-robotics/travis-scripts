@@ -3,7 +3,7 @@ set -e
 touch version.json
 echo testtest1 >> version.json
 
-echo $CC_REPO_CLONE_URL_HTTP
+export CC_REPO_CLONE_URL_HTTP=`aws codecommit get-repository --repository-name AppManifest-"$SA_NAME"-"$ROS_DISTRO"-gazebo"$GAZEBO_VERSION" | jq -r '.repositoryMetadata | .cloneUrlHttp'`
 # Clone the CC repository where version.json lives and commit the version.json file produced by current build
 git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
 cd cc-repo-for-version-file
