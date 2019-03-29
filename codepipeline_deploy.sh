@@ -3,10 +3,7 @@ set -e
 touch version.json
 echo testtest1 >> version.json
 
-touch version.json
-echo testtest1 >> version.json
-
-
+echo $CC_REPO_CLONE_URL_HTTP
 # Clone the CC repository where version.json lives and commit the version.json file produced by current build
 git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
 cd cc-repo-for-version-file
