@@ -26,7 +26,7 @@ do
     if [ -f "${WS_BUILD_SCRIPT}" ]; then
       cd "${WS_DIR}"
       bash "${WS_BUILD_SCRIPT}"
-      mv ./bundle/output.tar.gz /shared/"${WS}".tar.gz
+      mv ./bundle/output.tar /shared/"${WS}".tar
     else
       echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
       exit 1
