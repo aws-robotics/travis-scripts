@@ -13,7 +13,13 @@ if [ -z "${PIPELINE_TIMEOUT}" ]; then
 fi
 
 # Start execution
-PIPELINE_EXECUTION_ID=`aws codepipeline start-pipeline-execution --name "$CODE_PIPELINE_NAME" | jq -r .pipelineExecutionId`
+PIPELINE_EXECUTION_ID=`aws codepipeline start-pipeline-execution --name "$CODE_PIPELINE_NAME"`
+start_execution_exit_code=$?
+if [ $start_execution_exit_code -ne 0 ]; then
+    echo "Failed starting execution for pipeline ${CODE_PIPELINE_NAME}, exiting"
+    exit $start_execution_exit_code
+fi
+PIPELINE_EXECUTION_ID=`echo ${PIPELINE_EXECUTION_ID} | jq -r .pipelineExecutionId`
 
 starting_time=`date +%s`
 retry_interval=5 # Poll every 5 seconds
