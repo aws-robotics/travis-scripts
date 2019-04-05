@@ -13,4 +13,4 @@ cp "$TRAVIS_BUILD_DIR/version.json" "$TRAVIS_BUILD_DIR/shared/version.json"
 # Fetch the relevant S3 bucket & CodePipeline
 export S3_BUCKET_NAME=`aws s3 ls | grep "travis-source" | awk '{print $3}'`
 export SA_NAME_WITHOUT_DASHES=`echo $SA_NAME | sed -e 's/-//g'`
-export CODE_PIPELINE_NAME=`aws codepipeline list-pipelines | jq -r '.pipelines | .[] | .name' | grep "${SA_NAME_WITHOUT_DASHES}" | grep "gazebo${GAZEBO_VERSION}"`
+export CC_REPO_CLONE_URL_HTTP=`aws codecommit get-repository --repository-name AppManifest-"$SA_NAME"-"$ROS_DISTRO"-gazebo"$GAZEBO_VERSION" | jq -r '.repositoryMetadata | .cloneUrlHttp'`
