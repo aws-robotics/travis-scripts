@@ -37,3 +37,4 @@ else
     echo {\"application_version\": \"${SA_VERSION}\"} > "$TRAVIS_BUILD_DIR/version.json"
 fi
 ls $TRAVIS_BUILD_DIR
+pwd
