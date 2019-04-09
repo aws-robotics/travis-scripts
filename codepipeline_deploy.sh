@@ -10,7 +10,12 @@ fi
 # Move artifacts to shared/<version>/ and version.json to shared/
 mkdir $SA_VERSION && mv $TRAVIS_BUILD_DIR/shared/* $SA_VERSION && mv $SA_VERSION $TRAVIS_BUILD_DIR/shared/
 cp "$TRAVIS_BUILD_DIR/version.json" "$TRAVIS_BUILD_DIR/shared/version.json"
-
+ls "$TRAVIS_BUILD_DIR"
+echo -----
+ls $TRAVIS_BUILD_DIR
+echo -----
+ls "$TRAVIS_BUILD_DIR/shared"
+echo here
 # Clone the CC repository where version.json lives and commit the version.json file produced by current build
 git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
 cd cc-repo-for-version-file
