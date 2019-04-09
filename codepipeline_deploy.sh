@@ -7,39 +7,22 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
     exit 0
 fi
 
-if [ -z "${PIPELINE_TIMEOUT}" ]; then
-    # 30 minutes by default
-    PIPELINE_TIMEOUT=1800
+# Get the HEAD commit ID for version.json in master branch if exists
+BRANCH_INFO=`aws codecommit get-branch --repository-name $APP_MANIFEST_REPO --branch-name mainline`
+if [ $? -ne 0 ]; then
+    echo "Could not find mainline branch for repository $APP_MANIFEST_REPO. Creating first commit."
+else
+    export BRANCH_COMMIT_ID=`echo $BRANCH_INFO | jq -r '.branch.commitId'`
 fi
 
-# Start execution
-PIPELINE_EXECUTION_ID=`aws codepipeline start-pipeline-execution --name "$CODE_PIPELINE_NAME"`
-start_execution_exit_code=$?
-if [ $start_execution_exit_code -ne 0 ]; then
-    echo "Failed starting execution for pipeline ${CODE_PIPELINE_NAME}, exiting"
-    exit $start_execution_exit_code
+export PARENT_COMMIT_FLAG=""
+if [ -n "$BRANCH_COMMIT_ID" ]; then
+    PARENT_COMMIT_FLAG="--parent-commit-id=$BRANCH_COMMIT_ID"
 fi
-PIPELINE_EXECUTION_ID=`echo ${PIPELINE_EXECUTION_ID} | jq -r .pipelineExecutionId`
 
-starting_time=`date +%s`
-retry_interval=5 # Poll every 5 seconds
-elapsed_time=0
-
-while [ $elapsed_time -lt $PIPELINE_TIMEOUT ]; do 
-  status=`aws codepipeline get-pipeline-execution --pipeline-name "$CODE_PIPELINE_NAME" --pipeline-execution-id "$PIPELINE_EXECUTION_ID" | jq -r .pipelineExecution.status`
-  echo "Pipeline status: $status"
-  # status corresponds to https://docs.aws.amazon.com/codepipeline/latest/APIReference/API_PipelineExecution.html#CodePipeline-Type-PipelineExecution-status
-  if [ "$status" = "Succeeded" ] || [ "$status" = "Superseded" ]; then
-    echo "Pipeline execution finished."
-    exit 0
-  elif [ "$status" = "Failed" ]; then
-    echo "Pipeline execution failed."
+if [ -z "$SA_VERSION" ]; then
+    echo "No application version set, did add_tag run?"
     exit 1
-  else
-    sleep $retry_interval
-    let elapsed_time="`date +%s` - $starting_time"
-  fi
-done
+fi
 
-echo "Reached timeout waiting for pipeline to finish."
-exit 1
+aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content "{\"application_version\": \"$SA_VERSION\"}" --file-path "/version.json" --commit-message "Updating to version $SA_VERSION. Commit for this version bump: $TRAVIS_COMMIT" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
