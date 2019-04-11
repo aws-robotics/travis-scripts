@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
 # install dependencies
-apt update && apt install -y python3-pip python3-apt dpkg ros-$ROS_DISTRO-ros-base && rosdep update
+apt update && apt install -y zip python3-pip python3-apt dpkg ros-$ROS_DISTRO-ros-base && rosdep update
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
 pip3 install colcon-bundle colcon-ros-bundle
 . /opt/ros/$ROS_DISTRO/setup.sh
