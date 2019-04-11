@@ -26,10 +26,9 @@ do
   fi
 done
 
-pushd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/ &>/dev/null
-zip -r /shared/sources.zip ./
+cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
+/usr/bin/zip -r /shared/sources.zip ./
 tar cvzf /shared/sources.tar.gz ./
-popd &>/dev/null
 
 for WS in $WORKSPACES
 do
