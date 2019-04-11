@@ -15,24 +15,31 @@ if [ -z "$WORKSPACES" ]; then
   WORKSPACES="robot_ws simulation_ws"
 fi
 
+# Run ROSWS update in each workspace before creating archive
+for WS in $WORKSPACES
+do
+  WS_DIR="/${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/${WS}"
+  echo "looking for ${WS}, $WS_DIR"
+  if [ -d "${WS_DIR}" ]; then
+    echo "WS ${WS_DIR} found, running rosws update"
+    rosws update -t "${WS_DIR}"
+  fi
+done
+
+zip -r /shared/sources.zip /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
+tar cvzf ./shared/sources.tar.gz /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
+
 for WS in $WORKSPACES
 do
   # use colcon as build tool to build the workspace if it exists
   WS_DIR="/${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/${WS}"
-  echo "looking for ${WS}, $WS_DIR"
-  if [ -d "${WS_DIR}" ]; then
-    echo "WS ${WS_DIR} found, attempting to build"
-    WS_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/ws_builds/${WS}.sh"
-    if [ -f "${WS_BUILD_SCRIPT}" ]; then
-      cd "${WS_DIR}"
-      bash "${WS_BUILD_SCRIPT}"
-      mv ./bundle/output.tar /shared/"${WS}".tar
-    else
-      echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
-      exit 1
-    fi
+  WS_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/ws_builds/${WS}.sh"
+  if [ -f "${WS_BUILD_SCRIPT}" ]; then
+    cd "${WS_DIR}"
+    bash "${WS_BUILD_SCRIPT}"
+    mv ./bundle/output.tar /shared/"${WS}".tar
   else
-    echo "Unable to find workspace ${WS_DIR}, build failed"
+    echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
     exit 1
   fi
 done
