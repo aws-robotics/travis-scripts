@@ -26,9 +26,11 @@ do
   fi
 done
 
+# Create archive of all sources files
+SOURCES_INCLUDES="robot_ws simulation_ws LICENSE* NOTICE* README* roboMakerSettings.json"
 cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
-/usr/bin/zip -r /shared/sources.zip ./
-tar cvzf /shared/sources.tar.gz ./
+/usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
+tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
 
 for WS in $WORKSPACES
 do
