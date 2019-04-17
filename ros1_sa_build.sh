@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
