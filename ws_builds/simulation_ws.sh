@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 rosws update
 rosdep install --from-paths src --ignore-src -r -y
 GAZEBO_POST_ROSDEP_INSTALL_SCRIPT="${SCRIPT_DIR}/gazebo/${GAZEBO_VERSION}/post_rosdep_install.sh"

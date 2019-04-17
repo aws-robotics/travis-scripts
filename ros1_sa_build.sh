@@ -1,7 +1,7 @@
 #!/bin/bash
-set -e
+set -ex
 
-SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
+export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
 # install dependencies
 apt update && apt install -y zip python3-pip python3-apt dpkg ros-$ROS_DISTRO-ros-base && rosdep update

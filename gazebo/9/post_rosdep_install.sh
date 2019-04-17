@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Gazebo 9, and remove gazebo 7
-set -e
+set -ex
 
 echo "Setting up Gazebo 9"
 
