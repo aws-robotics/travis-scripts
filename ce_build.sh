@@ -38,6 +38,7 @@ docker run -v "${PWD}/shared:/shared" \
   -e DOCKER_BUILD_SCRIPT="${DOCKER_BUILD_SCRIPT}" \
   -e WORKSPACES="${WORKSPACES}" \
   --name "${ROS_DISTRO}-container" \
+  --network=host \
   -dit "ros:${ROS_DISTRO}-ros-core" /bin/bash
 # make a workspace in the docker container
 docker exec "${ROS_DISTRO}-container" /bin/bash -c 'mkdir -p "/${ROS_DISTRO}_ws/src"'
