@@ -33,6 +33,7 @@ docker run -v "${PWD}/shared:/shared" \
   -e ROS_VERSION="${ROS_VERSION}" \
   -e NO_TEST="${NO_TEST}" \
   -e TRAVIS_BUILD_DIR="${TRAVIS_BUILD_DIR}" \
+  -e $TRAVIS_BRANCH="${TRAVIS_BRANCH}" \
   -e PACKAGE_LANG="${PACKAGE_LANG:-cpp}" \
   -e GAZEBO_VERSION="${GAZEBO_VERSION:-7}" \
   -e DOCKER_BUILD_SCRIPT="${DOCKER_BUILD_SCRIPT}" \
