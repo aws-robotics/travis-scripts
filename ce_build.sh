@@ -47,8 +47,7 @@ docker exec "${ROS_DISTRO}-container" /bin/bash -c 'mkdir -p "/${ROS_DISTRO}_ws/
 docker cp "${TRAVIS_BUILD_DIR}" "${ROS_DISTRO}-container":"/${ROS_DISTRO}_ws/src/"
 # execute build scripts and run test
 
-docker exec "${ROS_DISTRO}"-container /bin/bash \
-  -c "sh ${DOCKER_BUILD_SCRIPT}"
+docker exec "${ROS_DISTRO}"-container /bin/bash "${DOCKER_BUILD_SCRIPT}"
 # upload coverage report to codecov
 if [ -z "${NO_TEST}" ];
 then

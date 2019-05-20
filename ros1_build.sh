@@ -15,7 +15,8 @@ REPO_NAME=`echo $TRAVIS_BUILD_DIR | cut -c 33-`
 cd "/${ROS_DISTRO}_ws/"
 
 # use colcon as build tool to build the package, and optionally build tests
-if [ "$TRAVIS_BRANCH" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.master" ];
+then
     mkdir dep
     cd "/${ROS_DISTRO}_ws/dep"
     ln -s "../src/${REPO_NAME}/.rosinstall.master" .rosinstall
@@ -37,7 +38,7 @@ then
     # run unit tests
     . ./install/setup.sh
 
-    if [ "$TRAVIS_BRANCH" == "master" ];
+    if [ "${TRAVIS_BRANCH}" == "master" ];
     then
         touch dep/COLCON_IGNORE
     fi
