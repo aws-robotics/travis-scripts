@@ -44,7 +44,7 @@ then
     fi
 
     colcon test
-    colcon test-result --all
+    colcon test-result --all --verbose
 
     # get unit test code coverage result
     case ${PACKAGE_LANG} in 
