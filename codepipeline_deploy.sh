@@ -25,4 +25,5 @@ if [ -z "$SA_VERSION" ]; then
     exit 1
 fi
 
-aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content "{\"application_version\": \"$SA_VERSION\"}" --file-path "/version.json" --commit-message "Updating to version $SA_VERSION. Commit for this version bump: $TRAVIS_COMMIT" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
+TIMESTAMP=`date +%s`
+aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content "{\"application_version\": \"$SA_VERSION\",\"timestamp\":\"$TIMESTAMP\"}" --file-path "/version.json" --commit-message "Updating to version $SA_VERSION. Commit for this version bump: $TRAVIS_COMMIT" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
