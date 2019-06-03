@@ -4,9 +4,16 @@ set -e
 export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
 # install dependencies
-apt update && apt install -y zip python3-pip python3-apt dpkg ros-$ROS_DISTRO-ros-base && rosdep update
-apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
+apt-get update && apt-get install -q -y dirmngr gnupg2 lsb-release zip python3-pip python3-apt dpkg
+pip3 install -U setuptools
+sh -c 'echo "deb  http://13.52.195.14/ubuntu/main $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+apt-get update && apt-get install --no-install-recommends -y python-rosdep python-rosinstall python3-colcon-common-extensions ros-$ROS_DISTRO-ros-base
 pip3 install colcon-bundle colcon-ros-bundle
+# Remove the old rosdep sources.list
+rm -rf /etc/ros/rosdep/sources.list.d/*
+rosdep init && rosdep update
+
 . /opt/ros/$ROS_DISTRO/setup.sh
 
 BUILD_DIR_NAME=`basename $TRAVIS_BUILD_DIR`
