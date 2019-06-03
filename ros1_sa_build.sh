@@ -41,7 +41,6 @@ do
     cd "${WS_DIR}"
     bash "${WS_BUILD_SCRIPT}"
     mv ./bundle/output.tar /shared/"${WS}".tar
-    mv ./bundle/sources.tar.gz /shared/${WS}_dependency_sources.tar.gz
   else
     echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
     exit 1
