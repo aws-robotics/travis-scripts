@@ -10,12 +10,6 @@ echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -c
 wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 apt-get update
 
-COLCON_BUNDLE_INSTALL_PATH="${HOME}/colcon-bundle"
-rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
-git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
-pip3 install --upgrade pip
-pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
-
 G9_APT_FILE="/etc/ros/rosdep/sources.list.d/00-gazebo9.list"
 rm -f "${G9_APT_FILE}"
 touch "${G9_APT_FILE}"
