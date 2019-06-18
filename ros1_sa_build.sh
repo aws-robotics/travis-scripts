@@ -10,10 +10,19 @@ sh -c 'echo "deb  http://13.52.195.14/ubuntu/main $(lsb_release -sc) main" > /et
 apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 apt-get update && apt-get install --no-install-recommends -y python-rosdep python-rosinstall python3-colcon-common-extensions ros-$ROS_DISTRO-ros-base
 pip3 install colcon-bundle colcon-ros-bundle
+
 # Get latest colcon bundle
 COLCON_BUNDLE_INSTALL_PATH="${HOME}/colcon-bundle"
 rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
 git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
+
+# Switch to commit "Support Melodic, fix aptitude trusted key config"
+#  https://github.com/colcon/colcon-bundle/commit/d5ea60e1a9adb34c5ba96e0fbd32fcd188cde15a
+WORKING_DIRECTORY=${PWD}
+cd ${COLCON_BUNDLE_INSTALL_PATH}
+git checkout d5ea60e1a9adb34c5ba96e0fbd32fcd188cde15a
+cd ${WORKING_DIRECTORY}
+
 pip3 install --upgrade pip
 pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
 
