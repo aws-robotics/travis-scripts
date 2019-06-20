@@ -8,8 +8,11 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
 fi
 
 # Get the HEAD commit ID for version.json in master branch if exists
+set +e # May fail
 BRANCH_INFO=`aws codecommit get-branch --repository-name $APP_MANIFEST_REPO --branch-name mainline`
-if [ $? -ne 0 ]; then
+BRANCH_INFO_STATUS=$?
+set -e
+if [ $BRANCH_INFO_STATUS -ne 0 ]; then
     echo "Could not find mainline branch for repository $APP_MANIFEST_REPO. Creating first commit."
 else
     export BRANCH_COMMIT_ID=`echo $BRANCH_INFO | jq -r '.branch.commitId'`
