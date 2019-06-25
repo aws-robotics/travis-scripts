@@ -3,14 +3,12 @@ set -xe
 
 # install dependencies
 apt update && apt install -y lcov python3-pip python-rosinstall libgtest-dev cmake && rosdep update
-cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
 # nosetests needs coverage for Python 2
 apt-get install python-pip -y && pip install -U coverage
 # enable Python coverage "https://github.com/ros/catkin/blob/kinetic-devel/cmake/test/nosetests.cmake#L59"
 export CATKIN_TEST_COVERAGE=1
 
-. "/opt/ros/${ROS_DISTRO}/setup.sh"
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
 echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
 
@@ -26,6 +24,8 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.ma
 else
     rosdep install --from-paths src --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
 fi
+
+. "/opt/ros/${ROS_DISTRO}/setup.sh"
 
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 
