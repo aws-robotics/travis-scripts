@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xe
 
 # install dependencies
 apt update && apt install -y lcov python3-pip python-rosinstall libgtest-dev cmake && rosdep update
@@ -11,9 +11,10 @@ apt-get install python-pip -y && pip install -U coverage
 export CATKIN_TEST_COVERAGE=1
 
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
-REPO_NAME=`echo $TRAVIS_BUILD_DIR | cut -c 33-`
-cd "/${ROS_DISTRO}_ws/"
+REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
+echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
 
+cd "/${ROS_DISTRO}_ws/"
 # use colcon as build tool to build the package, and optionally build tests
 if [ "${TRAVIS_BRANCH}" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
     mkdir dep
