@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xe
 
 if [ ! -z "${TRAVIS_TAG}" ]; then
     # Do not run for builds triggered by tagging.
@@ -23,17 +23,17 @@ else
 fi
 
 echo "using Build script, ${BUILD_SCRIPT_NAME}"
-DOCKER_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/${BUILD_SCRIPT_NAME}"
+DOCKER_BUILD_SCRIPT="/shared/$(basename -- ${SCRIPT_DIR})/${BUILD_SCRIPT_NAME}"
 # get a docker container from OSRF's docker hub
 docker pull "ros:${ROS_DISTRO}-ros-core"
 # run docker container
 docker run -v "${PWD}/shared:/shared" \
   -e ROS_DISTRO="${ROS_DISTRO}" \
-  -e PACKAGE_NAME="${PACKAGE_NAME}" \
+  -e PACKAGE_NAMES="${PACKAGE_NAMES}" \
   -e ROS_VERSION="${ROS_VERSION}" \
   -e NO_TEST="${NO_TEST}" \
   -e TRAVIS_BUILD_DIR="${TRAVIS_BUILD_DIR}" \
-  -e $TRAVIS_BRANCH="${TRAVIS_BRANCH}" \
+  -e TRAVIS_BRANCH="${TRAVIS_BRANCH}" \
   -e PACKAGE_LANG="${PACKAGE_LANG:-cpp}" \
   -e GAZEBO_VERSION="${GAZEBO_VERSION:-7}" \
   -e DOCKER_BUILD_SCRIPT="${DOCKER_BUILD_SCRIPT}" \

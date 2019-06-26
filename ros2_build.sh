@@ -9,15 +9,15 @@ cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
 
 # use colcon as build tool to build the package, and optionally build tests
-. /opt/ros/$ROS_DISTRO/setup.sh
-cd /"$ROS_DISTRO"_ws/
-rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO -r -y
+. "/opt/ros/${ROS_DISTRO}/setup.sh"
+cd "/${ROS_DISTRO}_ws/"
+rosdep install --from-paths src --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
+
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
-if [ -z "${NO_TEST}" ];
-then
-    if [ ! -z "${PACKAGE_NAME}" ] && [ "$ROS_VERSION" == "1" ];
-    then
-      colcon build --packages-select $PACKAGE_NAME --cmake-target tests
+
+if [ -z "${NO_TEST}" ]; then
+    if [ ! -z "${PACKAGE_NAMES}" ] && [ "${ROS_VERSION}" == "1" ]; then
+        colcon build --packages-select ${PACKAGE_NAMES} --cmake-target tests
     fi
 
     # run unit tests
@@ -29,6 +29,6 @@ then
     lcov --capture --directory . --output-file coverage.info
     lcov --remove coverage.info '/usr/*' --output-file coverage.info
     lcov --list coverage.info
-    cd /"$ROS_DISTRO"_ws/
+    cd "/${ROS_DISTRO}_ws/"
     mv coverage.info /shared
 fi
