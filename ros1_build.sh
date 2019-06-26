@@ -37,7 +37,7 @@ if [ -z "${NO_TEST}" ]; then
     # run unit tests
     . ./install/setup.sh
 
-    if [ "${TRAVIS_BRANCH}" == "master" ]; then
+    if [ "${TRAVIS_BRANCH}" == "master" ] && [ -d "./dep" ]; then
         touch dep/COLCON_IGNORE
     fi
 
@@ -45,8 +45,8 @@ if [ -z "${NO_TEST}" ]; then
     colcon test-result --all --verbose
 
     # get unit test code coverage result
-    case ${PACKAGE_LANG} in 
-        "cpp") 
+    case ${PACKAGE_LANG} in
+        "cpp")
             lcov --capture --directory . --output-file coverage.info
             lcov --remove coverage.info '/usr/*' --output-file coverage.info
             lcov --list coverage.info
