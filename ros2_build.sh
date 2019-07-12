@@ -11,7 +11,16 @@ apt update && apt install -y python3-colcon-common-extensions && pip3 install -U
 # use colcon as build tool to build the package, and optionally build tests
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
 cd "/${ROS_DISTRO}_ws/"
-rosdep install --from-paths src --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
+if [ "${TRAVIS_BRANCH}" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
+    mkdir dep
+    cd "/${ROS_DISTRO}_ws/dep"
+    ln -s "../src/${REPO_NAME}/.rosinstall.master" .rosinstall
+    rosws update
+    cd "/${ROS_DISTRO}_ws/"
+    rosdep install --from-paths src dep --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
+else
+    rosdep install --from-paths src --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
+fi
 
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 
