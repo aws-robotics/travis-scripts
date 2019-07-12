@@ -4,9 +4,8 @@ set -xe
 # install dependencies
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
 echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
-apt update && apt install -y python3 python3-pip libgtest-dev lcov cmake && rosdep update
-cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
-apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
+apt update && apt install -y python3 python3-pip lcov cmake && rosdep update
+apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
 echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
