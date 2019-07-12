@@ -8,6 +8,9 @@ apt update && apt install -y python3 python3-pip libgtest-dev lcov cmake && rosd
 cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
 apt update && apt install -y python3-colcon-common-extensions && pip3 install -U setuptools
 
+REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
+echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
+
 # use colcon as build tool to build the package, and optionally build tests
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
 cd "/${ROS_DISTRO}_ws/"
