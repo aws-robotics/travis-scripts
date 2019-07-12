@@ -34,7 +34,7 @@ if [ -z "${NO_TEST}" ]; then
     # run unit tests
     . ./install/setup.sh
     colcon test
-    colcon test-result --all
+    colcon test-result --all --verbose
 
     # get unit test code coverage result
     lcov --capture --directory . --output-file coverage.info
