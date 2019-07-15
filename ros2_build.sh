@@ -27,12 +27,11 @@ fi
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 
 if [ -z "${NO_TEST}" ]; then
-    if [ ! -z "${PACKAGE_NAMES}" ] && [ "${ROS_VERSION}" == "1" ]; then
-        colcon build --packages-select ${PACKAGE_NAMES} --cmake-target tests
-    fi
-
     # run unit tests
     . ./install/setup.sh
+    if [ "${TRAVIS_BRANCH}" == "master" ] && [ -d "./dep" ]; then
+        touch dep/COLCON_IGNORE
+    fi
     colcon test
     colcon test-result --all --verbose
 
