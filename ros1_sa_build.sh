@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xe
 
 export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
@@ -62,7 +62,7 @@ do
   WS_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/ws_builds/${WS}.sh"
   if [ -f "${WS_BUILD_SCRIPT}" ]; then
     cd "${WS_DIR}"
-    bash "${WS_BUILD_SCRIPT}"
+    "${WS_BUILD_SCRIPT}"
     mv ./bundle/output.tar /shared/"${WS}".tar
   else
     echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
