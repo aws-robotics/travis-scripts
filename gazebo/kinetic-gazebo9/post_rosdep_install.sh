@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Install Gazebo 9, and remove gazebo 7
+# Remove Kinetic Gazebo 7 and Install Kinetic Gazebo 9
 set -e
 
 echo "Setting up Gazebo 9"
