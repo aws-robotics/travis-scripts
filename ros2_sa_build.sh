@@ -15,10 +15,14 @@ pip3 install colcon-bundle colcon-ros-bundle
 # Get latest colcon bundle
 COLCON_BUNDLE_INSTALL_PATH="${HOME}/colcon-bundle"
 rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
-git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
+COLCON_ROS_BUNDLE_INSTALL_PATH="${HOME}/colcon-ros-bundle"
+rm -rf "${COLCON_ROS_BUNDLE_INSTALL_PATH}"
+git clone -b ros2-support https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
+git clone -b ros2-support https://github.com/colcon/colcon-ros-bundle "${COLCON_ROS_BUNDLE_INSTALL_PATH}"
 
 pip3 install --upgrade pip
 pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
+pip install -U --editable "${COLCON_ROS_BUNDLE_INSTALL_PATH}"
 
 # Remove the old rosdep sources.list
 rm -rf /etc/ros/rosdep/sources.list.d/*
