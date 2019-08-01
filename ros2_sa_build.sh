@@ -18,7 +18,7 @@ rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
 git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
 
 pip3 install --upgrade pip
-pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
+pip3 install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
 
 # Remove the old rosdep sources.list
 rm -rf /etc/ros/rosdep/sources.list.d/*
@@ -56,7 +56,7 @@ do
   WS_BUILD_SCRIPT="/shared/$(basename ${SCRIPT_DIR})/ws_builds/${WS}.sh"
   if [ -f "${WS_BUILD_SCRIPT}" ]; then
     cd "${WS_DIR}"
-    "${WS_BUILD_SCRIPT}"
+    bash "${WS_BUILD_SCRIPT}"
     mv ./bundle/output.tar /shared/"${WS}".tar
   else
     echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
