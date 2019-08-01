@@ -18,7 +18,7 @@ rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
 git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
 
 pip3 install --upgrade pip
-pip3 install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
+pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
 
 # Remove the old rosdep sources.list
 rm -rf /etc/ros/rosdep/sources.list.d/*
