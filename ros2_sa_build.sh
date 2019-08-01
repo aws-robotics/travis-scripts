@@ -7,7 +7,7 @@ export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 apt-get update && apt-get install -q -y dirmngr curl gnupg2 lsb-release zip python3-pip python3-apt dpkg
 pip3 install -U setuptools
 
-curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros2-latest.list'
 apt-get update && apt-get install --no-install-recommends -y python-rosdep python3-rosinstall python3-colcon-common-extensions ros-$ROS_DISTRO-ros-base
 pip3 install colcon-bundle colcon-ros-bundle
