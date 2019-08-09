@@ -17,6 +17,10 @@ if [ -z "${SA_NAME}" ];
 then
   # SA_NAME not set - assume a Cloud Extension build
   BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_build.sh
+  # Copy codecov configuration if one doesn't already exist
+  if [ ! -f "${TRAVIS_BUILD_DIR}/.codecov.yml" ]; then 
+    cp "${SCRIPT_DIR}/ce_codecov.yml" "${TRAVIS_BUILD_DIR}/.codecov.yml"
+  fi
 else
   # SA_NAME is set - assume a Sample Application build
   BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
