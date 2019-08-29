@@ -33,7 +33,10 @@ if [ -z "${NO_TEST}" ]; then
     if [ "${TRAVIS_BRANCH}" == "master" ] && [ -d "./dep" ]; then
         touch dep/COLCON_IGNORE
     fi
+    
+    set +e
     colcon test
+    set -e
     colcon test-result --all --verbose
 
     # get unit test code coverage result
