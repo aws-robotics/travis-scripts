@@ -6,6 +6,8 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F
 echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
 apt update && apt install -y python3 python3-pip lcov cmake && rosdep update
 apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools
+# Manually install python3-boto3 (temporary measure until this dependency is available via rosdep).
+apt install -y python3-boto3
 apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep $ROS_DISTRO | xargs apt install -y
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
@@ -40,9 +42,19 @@ if [ -z "${NO_TEST}" ]; then
     colcon test-result --all --verbose
 
     # get unit test code coverage result
-    lcov --capture --directory . --output-file coverage.info
-    lcov --remove coverage.info '/usr/*' --output-file coverage.info
-    lcov --list coverage.info
-    cd "/${ROS_DISTRO}_ws/"
-    mv coverage.info /shared
+    case ${PACKAGE_LANG} in
+        "cpp")
+            lcov --capture --directory . --output-file coverage.info
+            lcov --remove coverage.info '/usr/*' --output-file coverage.info
+            lcov --list coverage.info
+            cd "/${ROS_DISTRO}_ws/"
+            mv coverage.info /shared
+            ;;
+        "python")
+            # this doesn't actually support multiple packages
+            cd "/${ROS_DISTRO}_ws/build/${PACKAGE_NAMES}"
+            coverage xml
+            cp coverage.xml /shared/coverage.info
+            ;;
+    esac
 fi
