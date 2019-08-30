@@ -53,8 +53,9 @@ if [ -z "${NO_TEST}" ]; then
         "python")
             # this doesn't actually support multiple packages
             cd "/${ROS_DISTRO}_ws/build/${PACKAGE_NAMES}"
-            coverage xml
-            cp coverage.xml /shared/coverage.info
+            # No Python coverage support through ament/colcon yet.
+            # coverage xml
+            # cp coverage.xml /shared/coverage.info
             ;;
     esac
 fi
