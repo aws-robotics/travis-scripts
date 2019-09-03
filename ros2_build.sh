@@ -5,9 +5,7 @@ set -xe
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
 echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
 apt update && apt install -y python3 python3-pip lcov cmake && rosdep update
-apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools coverage
-# Manually install python3-boto3 (temporary measure until this dependency is available via rosdep).
-apt install -y python3-boto3
+apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools coverage pytest
 apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep $ROS_DISTRO | xargs apt install -y
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
@@ -52,10 +50,8 @@ if [ -z "${NO_TEST}" ]; then
             ;;
         "python")
             # this doesn't actually support multiple packages
-            cd "/${ROS_DISTRO}_ws/build/${PACKAGE_NAMES}"
-            # No Python coverage support through ament/colcon yet.
-            # coverage xml
-            # cp coverage.xml /shared/coverage.info
+            pytest --cov=src/${REPO_NAME}/${PACKAGE_NAMES} --cov-report=xml
+            cp coverage.xml /shared/coverage.info
             ;;
     esac
 fi
