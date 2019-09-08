@@ -27,12 +27,8 @@ fi
 
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
 
-colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
-
 if [ -z "${NO_TEST}" ]; then
-    if [ ! -z "${PACKAGE_NAMES}" ]; then
-        colcon build --packages-select ${PACKAGE_NAMES} --cmake-target tests
-    fi
+    colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 
     # run unit tests
     . ./install/setup.sh
@@ -62,4 +58,6 @@ if [ -z "${NO_TEST}" ]; then
             cp coverage.xml /shared/coverage.info
             ;;
     esac
+else
+    colcon build --catkin-skip-building-tests --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 fi
