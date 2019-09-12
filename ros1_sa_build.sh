@@ -11,21 +11,6 @@ apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BAD
 apt-get update && apt-get install --no-install-recommends -y python-rosdep python-rosinstall python3-colcon-common-extensions ros-$ROS_DISTRO-ros-base
 pip3 install colcon-bundle colcon-ros-bundle
 
-# Get latest colcon bundle
-COLCON_BUNDLE_INSTALL_PATH="${HOME}/colcon-bundle"
-rm -rf "${COLCON_BUNDLE_INSTALL_PATH}"
-git clone https://github.com/colcon/colcon-bundle "${COLCON_BUNDLE_INSTALL_PATH}"
-
-# Switch to commit "Support Melodic, fix aptitude trusted key config"
-#  https://github.com/colcon/colcon-bundle/commit/d5ea60e1a9adb34c5ba96e0fbd32fcd188cde15a
-WORKING_DIRECTORY=${PWD}
-cd ${COLCON_BUNDLE_INSTALL_PATH}
-git checkout d5ea60e1a9adb34c5ba96e0fbd32fcd188cde15a
-cd ${WORKING_DIRECTORY}
-
-pip3 install --upgrade pip
-pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
-
 # Remove the old rosdep sources.list
 rm -rf /etc/ros/rosdep/sources.list.d/*
 rosdep init && rosdep update
