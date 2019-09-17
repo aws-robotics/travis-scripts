@@ -11,4 +11,7 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 
 colcon build --build-base build --install-base install
+
+# bundle will fail without this key
+apt-key adv --fetch-keys http://packages.osrfoundation.org/gazebo.key
 colcon bundle --build-base build --install-base install --bundle-base bundle
