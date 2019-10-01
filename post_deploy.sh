@@ -6,3 +6,6 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
     echo "Skipping $0 $@"
     exit 0
 fi
+
+# Restore default setting to be able to safely source this script in Travis: https://github.com/travis-ci/travis-ci/issues/891
+set +e
