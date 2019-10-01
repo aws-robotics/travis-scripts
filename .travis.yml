@@ -7,8 +7,12 @@ notifications:
     on_success: change
     on_failure: always
     recipients:
-      - avishaya@amazon.com
-      - avishayalon@gmail.com
+      - ros-contributions@amazon.com
+  email:
+    on_success: always
+    on_failure: always
+    recipients:
+      - travis-build@platform-notifications.robomaker.aws.a2z.com
 env:
   global:
     - GH_USER_NAME="travis-ci"
