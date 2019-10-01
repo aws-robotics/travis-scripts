@@ -36,3 +36,6 @@ else
     export SA_VERSION=${CURRENT_SA_VERSION}.${TRAVIS_BUILD_NUMBER}
     echo {\"application_version\": \"${SA_VERSION}\"} > "$TRAVIS_BUILD_DIR/version.json"
 fi
+
+# Restore default setting to be able to safely source this script in Travis: https://github.com/travis-ci/travis-ci/issues/891
+set +e
