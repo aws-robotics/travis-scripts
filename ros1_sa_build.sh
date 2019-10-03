@@ -12,4 +12,4 @@ apt-get update && apt-get install --no-install-recommends -y python-rosdep pytho
 pip3 install colcon-bundle colcon-ros-bundle
 
 COMMON_SA_BUILD_SCRIPT=${SCRIPT_DIR}/common_sa_build.sh
-"${COMMON_SA_BUILD_SCRIPT}"
+. "${COMMON_SA_BUILD_SCRIPT}"

@@ -26,4 +26,4 @@ pip install -U --editable "${COLCON_BUNDLE_INSTALL_PATH}"
 pip install -U --editable "${COLCON_ROS_BUNDLE_INSTALL_PATH}"
 
 COMMON_SA_BUILD_SCRIPT=${SCRIPT_DIR}/common_sa_build.sh
-"${COMMON_SA_BUILD_SCRIPT}"
+. "${COMMON_SA_BUILD_SCRIPT}"
