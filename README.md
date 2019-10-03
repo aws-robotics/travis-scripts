@@ -3,6 +3,26 @@
 ## Overview
 This repository contains scripts used in Travis CIs for [AWS RoboMaker] sample applications and [AWS RoboMaker] ROS Cloud Extensions.
 
+## Configuration Options
+
+Configuration is done via environment variables. When adding a new option, make sure to also pass that variable into the docker container used for the build (see `ce_build.sh`).
+
+### Common
+
+* `ROS_VERSION`, `ROS_DISTRO`, `GAZEBO_VERSION`: determine which build flavour and docker image to use
+
+### Sample Applications
+
+* `WORKSPACES`: which workspaces should be built.
+* `SA_PACKAGE_NAME`: controls which package's manifest file would determine the version of the application bundle that's going to be uploaded to S3.
+* `UPLOAD_SOURCES`: by default, the source files for `${WORKSPACES}` will be uploaded (along with LICENSE, NOTICE, README and roboMakerSettings.json files). You may override the default behavior.
+  * `UPLOAD_SOURCES=false`: Skip source upload
+  * Note: when workspaces are built separately (i.e. one build job for each workspace), it is recommended to disable source upload for the build jobs and add a dedicated stage for it using `prepare_sources_to_upload.sh`.
+
+### Cloud Extensions
+
+* `NO_TEST`: unit tests are enabled by default, specify NO_TESTS=true to override.
+
 ## Testing locally
 
 ### Testing Sample Applications
