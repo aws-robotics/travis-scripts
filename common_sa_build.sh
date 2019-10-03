@@ -26,11 +26,21 @@ do
   fi
 done
 
-# Create archive of all sources files
-SOURCES_INCLUDES="${WORKSPACES} LICENSE* NOTICE* README* roboMakerSettings.json"
-cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
-/usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
-tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
+# Create archive of relevant sources files (unless UPLOAD_SOURCES is false)
+if [ ! -z "$UPLOAD_SOURCES" ] && [ "$UPLOAD_SOURCES" == "false" ]; then
+  echo "Skipping source upload for this build job"
+else
+  if [ -z "$UPLOAD_SOURCES" ]; then
+    SOURCES_INCLUDES="${WORKSPACES} LICENSE* NOTICE* README* roboMakerSettings.json"
+    echo "Using default source upload: ${SOURCES_INCLUDES}"
+  else
+    SOURCES_INCLUDES=${UPLOAD_SOURCES}
+    echo "Override set for source upload: ${SOURCES_INCLUDES}"
+  fi
+  cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
+  /usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
+  tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
+fi
 
 for WS in $WORKSPACES
 do
