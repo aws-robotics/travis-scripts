@@ -17,7 +17,7 @@ Configuration is done via environment variables. When adding a new option, make 
 * `SA_PACKAGE_NAME`: controls which package's manifest file would determine the version of the application bundle that's going to be uploaded to S3.
 * `UPLOAD_SOURCES`: by default, the source files for `${WORKSPACES}` will be uploaded (along with LICENSE, NOTICE, README and roboMakerSettings.json files). You may override the default behavior.
   * `UPLOAD_SOURCES=false`: Skip source upload
-  * `UPLOAD_SOURCES=<file/directory paths>` to override the default sources list
+  * Note: when workspaces are built separately (i.e. one build job for each workspace), it is recommended to disable source upload for the build jobs and add a dedicated stage for it using `prepare_sources_to_upload.sh`.
 
 ### Cloud Extensions
 
