@@ -35,7 +35,7 @@ if [ -z "${NO_TEST}" ]; then
     fi
     
     set +e
-    colcon test
+    colcon test --pytest-args --cov=. --cov-report=xml
     set -e
     colcon test-result --all --verbose
 
@@ -50,8 +50,7 @@ if [ -z "${NO_TEST}" ]; then
             ;;
         "python")
             # this doesn't actually support multiple packages
-            pytest --cov=src/${REPO_NAME}/${PACKAGE_NAMES} --cov-report=xml
-            cp coverage.xml /shared/coverage.info
+            cp src/${REPO_NAME}/${PACKAGE_NAMES}/coverage.xml /shared/coverage.info
             ;;
     esac
 fi
