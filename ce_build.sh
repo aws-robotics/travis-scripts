@@ -25,7 +25,11 @@ fi
 echo "using Build script, ${BUILD_SCRIPT_NAME}"
 DOCKER_BUILD_SCRIPT="/shared/$(basename -- ${SCRIPT_DIR})/${BUILD_SCRIPT_NAME}"
 # get a docker container from OSRF's docker hub
-docker pull "ros:${ROS_DISTRO}-ros-core"
+if [ -z "${DOCKER_ARCH}" ]; then
+  docker pull "ros:${ROS_DISTRO}-ros-core"
+else
+  docker pull "${DOCKER_ARCH}/ros:${ROS_DISTRO}-ros-core"
+fi
 # run docker container
 docker run -v "${PWD}/shared:/shared" \
   -e ROS_DISTRO="${ROS_DISTRO}" \
