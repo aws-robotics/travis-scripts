@@ -21,7 +21,7 @@ env:
     - GH_USER_EMAIL="travis@travis-ci.org"
     - AWS_DEFAULT_REGION=us-west-2
 before_install:
-- sudo apt-get update && sudo apt-get install -y python3
+- sudo apt-get update && sudo apt-get install -y python3 python3-distutils
 - which pip; ret=$?; if [ $ret == "1" ]; then curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py --user; fi
 - pip install --user awscli
 install:
