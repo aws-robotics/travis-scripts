@@ -60,7 +60,7 @@ jobs:
           on:
             branch: master
             
-      name: "Build & Bundle ROS1 Sample App arm64"
+    - name: "Build & Bundle ROS1 Sample App arm64"
       arch: arm64
       env:
         - DOCKER_ARCH=arm64v8
@@ -84,7 +84,7 @@ jobs:
           on:
             branch: master
        
-      name: "Build & Bundle ROS1 Sample App arm32"
+    - name: "Build & Bundle ROS1 Sample App arm32"
       arch: arm64
       env:
         - DOCKER_ARCH=arm32v7
