@@ -162,30 +162,6 @@ jobs:
           on:
             branch: master
             
-    - name: "Build & Bundle ROS2 Sample App arm32"
-      arch: arm64
-      env:
-        - DOCKER_ARCH=arm32v7
-        - ROS_VERSION=2 
-        - ROS_DISTRO=dashing
-        - GAZEBO_VERSION=9
-        - WORKSPACES="robot_ws simulation_ws"
-        - SA_NAME=hello-world
-        - SA_PACKAGE_NAME=hello_world_robot
-        - NO_TEST=true
-        - CLONE_URL=https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld
-        - CLONE_BRANCH=ros2
-      script:
-        - . .ros_ci/add_tag.sh && set +e
-        - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-        - sudo -E su $USER .ros_ci/ce_build.sh && set +e
-        - kill %1
-      deploy:
-        - provider: script
-          script: "echo Performing mock deploy stage"
-          on:
-            branch: master
-            
     - name: "Build ROS1 Cloud Extension amd64"
       env:
         - PACKAGE_NAMES=aws_ros1_common
@@ -242,20 +218,6 @@ jobs:
       arch: arm64
       env:
         - DOCKER_ARCH=arm64v8
-        - PACKAGE_NAMES=aws_ros2_common
-        - ROS_VERSION=2
-        - ROS_DISTRO=dashing
-        - CLONE_URL="https://github.com/aws-robotics/utils-ros2" 
-        - CLONE_BRANCH=master
-      script:
-        - sudo -E su $USER .ros_ci/ce_build.sh && set +e
-      before_deploy: # Blank override - no deploy stage for CEs
-      after_deploy: # Blank override - no deploy stage for CEs
-      
-    - name: "Build ROS2 Cloud Extension arm32"
-      arch: arm64
-      env:
-        - DOCKER_ARCH=arm32v7
         - PACKAGE_NAMES=aws_ros2_common
         - ROS_VERSION=2
         - ROS_DISTRO=dashing
