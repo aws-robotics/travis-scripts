@@ -108,7 +108,7 @@ jobs:
       script:
         - . .ros_ci/add_tag.sh && set +e
         - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-        - ".ros_ci/ce_build.sh"
+        - sudo -E su $USER .ros_ci/ce_build.sh
         - kill %1
       deploy:
         - provider: script
