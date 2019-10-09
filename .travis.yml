@@ -21,6 +21,8 @@ env:
     - GH_USER_EMAIL="travis@travis-ci.org"
     - AWS_DEFAULT_REGION=us-west-2
 before_install:
+- sudo apt-get update && sudo apt-get install -y python3
+- which pip; ret=$?; if [ $ret == "1" ]; then curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py; fi
 - pip install --user awscli
 install:
   # Universal steps for fetching a repository & restructuring the directory tree to align with the way our CI is set up
