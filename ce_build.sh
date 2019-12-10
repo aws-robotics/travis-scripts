@@ -38,6 +38,7 @@ docker run -v "${PWD}/shared:/shared" \
   -e GAZEBO_VERSION="${GAZEBO_VERSION:-7}" \
   -e DOCKER_BUILD_SCRIPT="${DOCKER_BUILD_SCRIPT}" \
   -e WORKSPACES="${WORKSPACES}" \
+  -e SOURCE_ONLY_WORKSPACES="${SOURCE_ONLY_WORKSPACES}" \
   -e UPLOAD_SOURCES="${UPLOAD_SOURCES}" \
   --name "${ROS_DISTRO}-container" \
   --network=host \

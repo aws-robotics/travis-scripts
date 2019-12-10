@@ -15,8 +15,10 @@ if [ -z "$WORKSPACES" ]; then
   WORKSPACES="robot_ws simulation_ws"
 fi
 
+SOURCE_WORKSPACES="${WORKSPACES} ${SOURCE_ONLY_WORKSPACES}"
+
 # Run ROSWS update in each workspace before creating archive
-for WS in $WORKSPACES
+for WS in $SOURCE_WORKSPACES
 do
   WS_DIR="/${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/${WS}"
   echo "looking for ${WS}, $WS_DIR"
@@ -30,7 +32,7 @@ done
 if [ ! -z "$UPLOAD_SOURCES" ] && [ "$UPLOAD_SOURCES" == "false" ]; then
   echo "Skipping source upload for this build job"
 else
-  SOURCES_INCLUDES="${WORKSPACES} LICENSE* NOTICE* README* roboMakerSettings.json"
+  SOURCES_INCLUDES="${SOURCE_WORKSPACES} LICENSE* NOTICE* README* roboMakerSettings.json"
   cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
   /usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
   tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
