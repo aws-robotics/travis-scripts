@@ -14,6 +14,7 @@ Configuration is done via environment variables. When adding a new option, make 
 ### Sample Applications
 
 * `WORKSPACES`: which workspaces should be built.
+* `SOURCE_ONLY_WORKSPACES`: workspaces which shouldn't be be built, but the source files will be included in the source upload
 * `SA_PACKAGE_NAME`: controls which package's manifest file would determine the version of the application bundle that's going to be uploaded to S3.
 * `UPLOAD_SOURCES`: by default, the source files for `${WORKSPACES}` will be uploaded (along with LICENSE, NOTICE, README and roboMakerSettings.json files). You may override the default behavior.
   * `UPLOAD_SOURCES=false`: Skip source upload
