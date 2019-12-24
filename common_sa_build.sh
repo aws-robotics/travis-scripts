@@ -4,12 +4,12 @@ set -xe
 export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 
 # Remove the old rosdep sources.list
-rm -rf /etc/ros/rosdep/sources.list.d/*
-rosdep init && rosdep update
+sudo rm -rf /etc/ros/rosdep/sources.list.d/*
+sudo rosdep init && rosdep update
 
 . /opt/ros/$ROS_DISTRO/setup.sh
 
-BUILD_DIR_NAME=`basename $TRAVIS_BUILD_DIR`
+BUILD_DIR_NAME=`basename ${TRAVIS_BUILD_DIR}`
 
 if [ -z "$WORKSPACES" ]; then
   WORKSPACES="robot_ws simulation_ws"
@@ -34,8 +34,8 @@ if [ ! -z "$UPLOAD_SOURCES" ] && [ "$UPLOAD_SOURCES" == "false" ]; then
 else
   SOURCES_INCLUDES="${SOURCE_WORKSPACES} LICENSE* NOTICE* README* roboMakerSettings.json"
   cd /${ROS_DISTRO}_ws/src/${BUILD_DIR_NAME}/
-  /usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
-  tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
+  sudo /usr/bin/zip -r /shared/sources.zip $SOURCES_INCLUDES
+  sudo tar cvzf /shared/sources.tar.gz $SOURCES_INCLUDES
 fi
 
 for WS in $WORKSPACES
@@ -46,7 +46,7 @@ do
   if [ -f "${WS_BUILD_SCRIPT}" ]; then
     cd "${WS_DIR}"
     bash "${WS_BUILD_SCRIPT}"
-    mv ./bundle/output.tar /shared/"${WS}".tar
+    sudo mv ./bundle/output.tar /shared/"${WS}".tar
   else
     echo "Unable to find build script ${WS_BUILD_SCRIPT}, build failed"
     exit 1
