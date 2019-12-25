@@ -16,10 +16,10 @@ cp -r "${SCRIPT_DIR}" shared/
 if [ -z "${SA_NAME}" ];
 then
   # SA_NAME not set - assume a Cloud Extension build
-  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_build.sh
+  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_build.sh
 else
   # SA_NAME is set - assume a Sample Application build
-  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
+  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_sa_build.sh
 fi
 
 echo "using Build script, ${BUILD_SCRIPT_NAME}"

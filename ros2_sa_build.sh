@@ -6,8 +6,8 @@ export SCRIPT_DIR=$(dirname ${DOCKER_BUILD_SCRIPT})
 # install dependencies
 ROS_BOOTSTRAP_SCRIPT=${SCRIPT_DIR}/ros_bootstrap.sh
 "${ROS_BOOTSTRAP_SCRIPT}"
-sudo apt-get update && sudo apt-get install --no-install-recommends -y python3-colcon-common-extensions ros-$ROS_DISTRO-ros-base
-apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep $ROS_DISTRO | xargs sudo apt-get install -y
+sudo apt-get update && sudo apt-get install --no-install-recommends -y python3-colcon-common-extensions ros-${ROS_DISTRO}-ros-base
+apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep ${ROS_DISTRO} | xargs sudo apt-get install -y
 sudo -H pip3 install -U colcon-bundle colcon-ros-bundle
 
 # Get latest colcon bundle

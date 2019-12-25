@@ -6,7 +6,7 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F
 echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
 apt update && apt install -y python3 python3-pip lcov cmake && rosdep update
 apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools coverage pytest
-apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep $ROS_DISTRO | xargs apt install -y
+apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep ${ROS_DISTRO} | xargs apt install -y
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
 echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"

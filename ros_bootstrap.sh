@@ -6,12 +6,12 @@ sudo apt-get update && sudo apt-get install -q -y dirmngr curl gnupg2 lsb-releas
 sudo -H pip3 install -U setuptools
 
 if [ "${ROS_VERSION}" == "1" ]; then
-  sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+  echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
   apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   sudo apt-get update && sudo apt-get install -y python-rosdep python-rosinstall
 elif [ "${ROS_VERSION}" == "2" ]; then
   curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-  sudo sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros2-latest.list'
+  echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2-latest.list
   sudo apt-get update && sudo apt-get install -y python3-rosdep python3-rosinstall
 else
   echo "ROS_VERSION not defined or recognized"
