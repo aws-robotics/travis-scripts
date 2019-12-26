@@ -1,18 +1,19 @@
 #!/bin/bash
 set -xe
 
+# add keys and sources
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
+echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
 # install dependencies
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
-echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
-apt update && apt install -y python3 python3-pip lcov cmake && rosdep update
-apt update && apt install -y python3-rosinstall python3-colcon-common-extensions && pip3 install -U setuptools coverage pytest
-apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep ${ROS_DISTRO} | xargs apt install -y
+sudo apt-get update && sudo apt-get install -y python3 python3-pip lcov cmake && rosdep update
+sudo apt-get update && sudo apt-get install -y python3-rosinstall python3-colcon-common-extensions && sudo -H pip3 install -U setuptools coverage pytest
+apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep ${ROS_DISTRO} | xargs sudo apt-get install -y
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
 echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
 
-# use colcon as build tool to build the package, and optionally build tests
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
+
 cd "/${ROS_DISTRO}_ws/"
 if [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
     mkdir dep
@@ -25,11 +26,13 @@ else
     rosdep install --from-paths src --ignore-src --rosdistro "${ROS_DISTRO}" -r -y
 fi
 
+# use colcon as build tool to build the package, and optionally build tests
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS='-fprofile-arcs -ftest-coverage' -DCMAKE_C_FLAGS='-fprofile-arcs -ftest-coverage'
 
+# run unit tests
 if [ -z "${NO_TEST}" ]; then
-    # run unit tests
     . ./install/setup.sh
+
     if [ "${TRAVIS_BRANCH}" == "master" ] && [ -d "./dep" ]; then
         touch dep/COLCON_IGNORE
     fi
@@ -46,11 +49,11 @@ if [ -z "${NO_TEST}" ]; then
             lcov --remove coverage.info '/usr/*' --output-file coverage.info
             lcov --list coverage.info
             cd "/${ROS_DISTRO}_ws/"
-            mv coverage.info /shared
+            sudo cp coverage.info /shared/
             ;;
         "python")
             # this doesn't actually support multiple packages
-            cp src/${REPO_NAME}/${PACKAGE_NAMES}/coverage.xml /shared/coverage.info
+            sudo cp src/${REPO_NAME}/${PACKAGE_NAMES}/coverage.xml /shared/coverage.info
             ;;
     esac
 fi
