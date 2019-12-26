@@ -16,10 +16,10 @@ cp -r "${SCRIPT_DIR}" shared/
 if [ -z "${SA_NAME}" ];
 then
   # SA_NAME not set - assume a Cloud Extension build
-  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_build.sh
+  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_build.sh
 else
   # SA_NAME is set - assume a Sample Application build
-  BUILD_SCRIPT_NAME=ros"$ROS_VERSION"_sa_build.sh
+  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_sa_build.sh
 fi
 
 echo "using Build script, ${BUILD_SCRIPT_NAME}"
@@ -43,13 +43,21 @@ docker run -v "${PWD}/shared:/shared" \
   --name "${ROS_DISTRO}-container" \
   --network=host \
   -dit "ros:${ROS_DISTRO}-ros-core" /bin/bash
+
+# add the rosdev non-root user
+docker exec "${ROS_DISTRO}-container" /bin/bash -c 'groupadd -g 999 rosdev && useradd -m -u 999 -g rosdev -G sudo rosdev'
+# set the rosdev user password to rosdev
+docker exec "${ROS_DISTRO}-container" /bin/bash -c 'echo "rosdev:rosdev" | chpasswd'
+# allow rosdev to use sudo without password
+docker exec "${ROS_DISTRO}-container" /bin/bash -c 'echo "rosdev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
 # make a workspace in the docker container
-docker exec "${ROS_DISTRO}-container" /bin/bash -c 'mkdir -p "/${ROS_DISTRO}_ws/src"'
+docker exec --user rosdev "${ROS_DISTRO}-container" /bin/bash -c 'sudo mkdir -p "/${ROS_DISTRO}_ws/src"'
 # copy the code over to the docker container
 docker cp "${TRAVIS_BUILD_DIR}" "${ROS_DISTRO}-container":"/${ROS_DISTRO}_ws/src/"
+docker exec --user rosdev "${ROS_DISTRO}-container" /bin/bash -c 'sudo chown -R rosdev "/${ROS_DISTRO}_ws"'
 # execute build scripts and run test
+docker exec --user rosdev "${ROS_DISTRO}"-container /bin/bash "${DOCKER_BUILD_SCRIPT}"
 
-docker exec "${ROS_DISTRO}"-container /bin/bash "${DOCKER_BUILD_SCRIPT}"
 # upload coverage report to codecov
 if [ -z "${NO_TEST}" ];
 then
