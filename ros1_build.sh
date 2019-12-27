@@ -50,7 +50,13 @@ if [ -z "${NO_TEST}" ]; then
     case ${PACKAGE_LANG} in
         "cpp")
             lcov --capture --directory . --output-file coverage.info
-            lcov --remove coverage.info '/usr/*' --output-file coverage.info
+            if [ "${ROS_DISTRO}" == "kinetic" ]; then
+                # kinetic is using xenial, which is using lcov 1.12, which has a bug.
+                # see https://github.com/linux-test-project/lcov/commit/632c25a0d1f5e4d2f4fd5b28ce7c8b86d388c91f
+                sudo lcov --remove coverage.info '/usr/*' --output-file coverage.info
+            else
+                lcov --remove coverage.info '/usr/*' --output-file coverage.info
+            fi
             lcov --list coverage.info
             cd "/${ROS_DISTRO}_ws/"
             sudo cp coverage.info /shared/
