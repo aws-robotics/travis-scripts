@@ -15,7 +15,7 @@ echo "repo: ${REPO_NAME} branch: ${TRAVIS_BRANCH}"
 . "/opt/ros/${ROS_DISTRO}/setup.sh"
 
 cd "/${ROS_DISTRO}_ws/"
-if [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] && [ -f "./src/${REPO_NAME}/.rosinstall.master" ]; then
     mkdir dep
     cd "/${ROS_DISTRO}_ws/dep"
     ln -s "../src/${REPO_NAME}/.rosinstall.master" .rosinstall
