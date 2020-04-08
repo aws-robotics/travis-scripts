@@ -13,13 +13,17 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 mkdir shared/
 # move travis scripts to share mount so they can be executed within the docker container
 cp -r "${SCRIPT_DIR}" shared/
-if [ -z "${SA_NAME}" ];
+if [ -z "${BUILD_SCRIPT_NAME}" ];
 then
-  # SA_NAME not set - assume a Cloud Extension build
-  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_build.sh
-else
-  # SA_NAME is set - assume a Sample Application build
-  BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_sa_build.sh
+  # BUILD_SCRIPT_NAME not set - assume already set by buildfarm canary lambda function
+  if [ -z "${SA_NAME}" ];
+  then
+    # SA_NAME not set - assume a Cloud Extension build
+    BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_build.sh
+  else
+    # SA_NAME is set - assume a Sample Application build
+    BUILD_SCRIPT_NAME=ros"${ROS_VERSION}"_sa_build.sh
+  fi
 fi
 
 echo "using Build script, ${BUILD_SCRIPT_NAME}"
