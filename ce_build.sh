@@ -26,10 +26,13 @@ then
   fi
 fi
 
+[ ${ROS_DISTRO} == "kinetic" ] && UBUNTU_DISTRO=xenial || UBUNTU_DISTRO=bionic
+DOCKER_IMAGE_NAME="rostooling/setup-ros-docker:ubuntu-${UBUNTU_DISTRO}-ros-${ROS_DISTRO}-ros-base-latest"
+
 echo "using Build script, ${BUILD_SCRIPT_NAME}"
 DOCKER_BUILD_SCRIPT="/shared/$(basename -- ${SCRIPT_DIR})/${BUILD_SCRIPT_NAME}"
 # get a docker container from OSRF's docker hub
-docker pull "ros:${ROS_DISTRO}-ros-core"
+docker pull "${DOCKER_IMAGE_NAME}"
 # run docker container
 docker run -v "${PWD}/shared:/shared" \
   -e ROS_DISTRO="${ROS_DISTRO}" \
@@ -46,7 +49,7 @@ docker run -v "${PWD}/shared:/shared" \
   -e UPLOAD_SOURCES="${UPLOAD_SOURCES}" \
   --name "${ROS_DISTRO}-container" \
   --network=host \
-  -dit "ros:${ROS_DISTRO}-ros-core" /bin/bash
+  -dit "${DOCKER_IMAGE_NAME}" /bin/bash
 
 # add the rosdev non-root user
 docker exec "${ROS_DISTRO}-container" /bin/bash -c 'groupadd -g 999 rosdev && useradd -m -u 999 -g rosdev -G sudo rosdev'
