@@ -52,12 +52,12 @@ docker run -v "${PWD}/shared:/shared" \
   -dit "${DOCKER_IMAGE_NAME}" /bin/bash
 
 # make a workspace in the docker container
-docker exec "${ROS_DISTRO}-container" /bin/bash -c 'mkdir -p "/${ROS_DISTRO}_ws/src"'
+docker exec "${ROS_DISTRO}-container" /bin/bash -c 'sudo mkdir -p "/${ROS_DISTRO}_ws/src"'
 # copy the code over to the docker container
 docker cp "${TRAVIS_BUILD_DIR}" "${ROS_DISTRO}-container":"/${ROS_DISTRO}_ws/src/"
-docker exec --user rosbuild "${ROS_DISTRO}-container" /bin/bash -c 'sudo chown -R rosbuild "/${ROS_DISTRO}_ws"'
+docker exec "${ROS_DISTRO}-container" /bin/bash -c 'sudo chown -R rosbuild "/${ROS_DISTRO}_ws"'
 # execute build scripts and run test
-docker exec --user rosbuild "${ROS_DISTRO}"-container /bin/bash "${DOCKER_BUILD_SCRIPT}"
+docker exec "${ROS_DISTRO}"-container /bin/bash "${DOCKER_BUILD_SCRIPT}"
 
 # upload coverage report to codecov
 if [ -z "${NO_TEST}" ];
