@@ -1,9 +1,6 @@
 #!/bin/bash
 set -xe
 
-# add keys and sources
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
-echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
 # install dependencies
 sudo apt-get update && sudo apt-get install -y python3 python3-pip lcov cmake && rosdep update
 sudo apt-get update && sudo apt-get install -y python3-rosinstall python3-colcon-common-extensions && sudo -H pip3 install -U setuptools coverage pytest
