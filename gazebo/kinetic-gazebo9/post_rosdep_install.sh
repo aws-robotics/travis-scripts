@@ -29,6 +29,7 @@ echo "Gazebo 7 uninstalled with success"
 
 echo "Installing Gazebo 9"
 sudo apt-get install -y ros-kinetic-gazebo9-*
+rosdep update
 echo "Gazebo 9 installed with success"
 
 echo "Gazebo 9 setup completed with success"
