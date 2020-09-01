@@ -3,7 +3,7 @@ set -xe
 
 # install dependencies
 sudo apt-get update && sudo apt-get install -y python3 python3-pip lcov cmake && rosdep update
-sudo apt-get update && sudo apt-get install -y python3-rosinstall python3-colcon-common-extensions && sudo -H pip3 install -U setuptools coverage pytest
+sudo apt-get update && sudo apt-get install -y python3-rosinstall python3-colcon-common-extensions && sudo -H pip3 install -U setuptools!=50.0.0 coverage pytest
 apt list --upgradable 2>/dev/null | awk {'print $1'} | sed 's/\/.*//g' | grep ${ROS_DISTRO} | xargs sudo apt-get install -y
 
 REPO_NAME=$(basename -- ${TRAVIS_BUILD_DIR})
