@@ -3,7 +3,7 @@ set -xe
 
 # install dependencies
 sudo apt-get update && sudo apt-get install -y lcov python3-pip python-rosinstall libgtest-dev cmake && rosdep update
-sudo apt-get update && sudo apt-get install -y python3-colcon-common-extensions && sudo -H pip3 install -U setuptools --force-reinstall
+sudo apt-get update && sudo apt-get install -y python3-colcon-common-extensions && sudo -H pip3 install -U setuptools
 # NOTE: Workaround for setuptools 50.0.* (see https://github.com/pypa/setuptools/issues/2352)
 export SETUPTOOLS_USE_DISTUTILS=stdlib
 
